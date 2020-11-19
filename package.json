@@ -1,0 +1,20 @@
+{
+  "name": "hopapp",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "14.6.0"
+  },
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
+  },
+  "dependencies": {
+    "nuxt": "^2.14.7",
+    "nuxt-buefy": "^0.4.4",
+    "sass": "^1.29.0",
+    "sass-loader": "^10.1.0"
+  }
+}
