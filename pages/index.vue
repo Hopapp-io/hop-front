@@ -27,20 +27,24 @@
           <div align="left" class="column">
             <div class="inicio">
               <div class="contenido">
-                <img :src="require('~/static/Hop_Maleta.svg')" alt="Hop" />
+                <img
+                  :src="require('~/static/Hop_Maleta.svg')"
+                  class="imagen-principal"
+                  alt="Hop"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="bg2">
+    <div class="bg2" id="servicio">
       <div class="contenedor">
         <h1 class="encabezado2">Nuestro servicio</h1>
         <div class="columns">
           <div class="column">
             <div class="card inicio">
-              <div class="card-content" style="width: 100%;">
+              <div class="card-content" style="width: 100%">
                 <div
                   class="columns"
                   style="text-align: center; align-items: center"
@@ -65,10 +69,10 @@
           </div>
           <div class="column">
             <div class="card inicio">
-              <div class="card-content" style="width: 100%;">
+              <div class="card-content" style="width: 100%">
                 <div
                   class="columns"
-                  style="text-align: center; align-items: center;"
+                  style="text-align: center; align-items: center"
                 >
                   <div class="column is-one-third">
                     <img
@@ -91,7 +95,7 @@
         <div class="columns">
           <div class="column">
             <div class="card inicio">
-              <div class="card-content" style="width: 100%;">
+              <div class="card-content" style="width: 100%">
                 <div
                   class="columns"
                   style="text-align: center; align-items: center"
@@ -118,7 +122,7 @@
           </div>
           <div class="column">
             <div class="card inicio">
-              <div class="card-content" style="width: 100%;">
+              <div class="card-content" style="width: 100%">
                 <div
                   class="columns"
                   style="text-align: center; align-items: center"
@@ -141,7 +145,105 @@
             </div>
           </div>
         </div>
+        <div class="columns">
+          <div class="column">
+            <div class="card inicio">
+              <div class="card-content" style="width: 100%">
+                <div
+                  class="columns"
+                  style="text-align: center; align-items: center"
+                >
+                  <div class="column is-one-third">
+                    <img
+                      :src="require('~/static/Cuenta.svg')"
+                      width="115px"
+                      style="min-width: 115px"
+                    />
+                  </div>
+                  <div class="column">
+                    <p class="subtitulo2" style="font-weight: 300">
+                      ¿Y cuánto cuesta?
+                    </p>
+                    <p class="subtitulo2">Depende de la cantidad de maletas</p>
+                    <p class="texto2">
+                      - Si llevas sólo una maleta el precio será de $15.000
+                    </p>
+                    <p class="texto2">
+                      - Por cada maleta adicional, te cobraremos $5.000
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg4">
+      <div class="contenedor">
+        <div class="columns">
+          <div class="column">
+            <div class="inicio">
+              <div class="card" style="width: 100%">
+                <div
+                  class="card-content"
+                  style="width: 100%; background-color: #ffffff"
+                >
+                  <div
+                    class="columns"
+                    style="text-align: center; align-items: center"
+                  >
+                    <div class="column is-one-third">
+                      <img
+                        :src="require('~/static/Persona1.png')"
+                        width="auto"
+                        style="min-width: 115px"
+                      />
+                    </div>
+                    <div class="column">
+                      <p
+                        class="subtitulo2"
+                        style="font-weight: 300; line-height: 2"
+                      >
+                        "Hop me permite viajar sin preocuparme de las largas
+                        esperas en los aeropuertos y ocupar mi tiempo en las
+                        cosas realmente importantes."
+                      </p>
+                      <p class="texto2" style="text-align: right">— Jane Doe</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg3" id="como">
+      <div class="contenedor">
+        <h1 class="encabezado2" style="color: #ffffff">Cómo funciona</h1>
+        <div class="columns">
+          <div class="column">
+            <div class="inicio">
+              <div class="columns" style="width: 100%; justify-content: center;">
+                <div class="column is-three-quarters" style="display: flex; justify-content: center;">
+                  <Timeline />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import Timeline from "~/components/Timeline";
+
+export default {
+  components: {
+    Timeline,
+  },
+};
+</script>

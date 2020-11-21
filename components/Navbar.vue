@@ -1,5 +1,5 @@
 <template>
-  <b-navbar class="is-primary">
+  <b-navbar fixed-top class="is-primary">
     <template slot="brand">
       <a href="/">
         <img
@@ -10,8 +10,8 @@
     </template>
     <template slot="end">
       <b-navbar-item href="#">Sobre nosotros</b-navbar-item>
-      <b-navbar-item href="#">Nuestro servicio</b-navbar-item>
-      <b-navbar-item href="#">Cómo funciona</b-navbar-item>
+      <b-navbar-item href="#servicio">Nuestro servicio</b-navbar-item>
+      <b-navbar-item href="#como">Cómo funciona</b-navbar-item>
     </template>
   </b-navbar>
 </template>
