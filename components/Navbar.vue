@@ -1,17 +1,19 @@
 <template>
   <b-navbar fixed-top class="is-primary">
     <template slot="brand">
-      <a href="/">
+      <nuxt-link to="/#">
         <img
           :src="require('~/static/Logo_Hop_blanco 1.svg')"
           alt="Hop"
           class="logo"
-        /></a>
+      /></nuxt-link>
     </template>
     <template slot="end">
-      <b-navbar-item href="#">Sobre nosotros</b-navbar-item>
-      <b-navbar-item href="#servicio">Nuestro servicio</b-navbar-item>
-      <b-navbar-item href="#como">Cómo funciona</b-navbar-item>
+      <nuxt-link to="/#" class="navbar-item">Sobre nosotros</nuxt-link>
+      <nuxt-link to="/#servicio" class="navbar-item"
+        >Nuestro servicio</nuxt-link
+      >
+      <nuxt-link to="/#como" class="navbar-item">Cómo funciona</nuxt-link>
     </template>
   </b-navbar>
 </template>
@@ -26,3 +28,9 @@ export default {
   methods: {},
 };
 </script>
+
+<style>
+.nuxt-link-active {
+  background-color: #76459a !important;
+}
+</style>

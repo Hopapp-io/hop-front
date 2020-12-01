@@ -15,10 +15,16 @@
                 </p>
                 <p class="subtitulo">Desde $15.000 CLP.</p>
                 <div class="buttons">
-                  <b-button
-                    type="is-primary is-light"
-                    style="font-size: 1rem; font-weight: bolder; color: #76459a"
-                    >Reserva ahora</b-button
+                  <nuxt-link to="/reserva"
+                    ><b-button
+                      type="is-primary is-light"
+                      style="
+                        font-size: 1rem;
+                        font-weight: bolder;
+                        color: #76459a;
+                      "
+                      >Reserva ahora</b-button
+                    ></nuxt-link
                   >
                 </div>
               </div>
@@ -225,8 +231,11 @@
         <div class="columns">
           <div class="column">
             <div class="inicio">
-              <div class="columns" style="width: 100%; justify-content: center;">
-                <div class="column is-three-quarters" style="display: flex; justify-content: center;">
+              <div class="columns" style="width: 100%; justify-content: center">
+                <div
+                  class="column is-three-quarters"
+                  style="display: flex; justify-content: center"
+                >
                   <Timeline />
                 </div>
               </div>
