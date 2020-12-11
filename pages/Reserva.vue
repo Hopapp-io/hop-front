@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg1">
     <div class="contenedor">
@@ -13,7 +12,6 @@
                 :has-navigation="true"
                 label-position="bottom"
                 mobile-mode="minimalist"
-                
               >
                 <b-step-item step="1" label="Vuelo" :clickable="false">
                   <h1 class="title is-2">Llena los datos de tu vuelo</h1>
@@ -87,7 +85,7 @@
                 <b-step-item step="2" label="Selecciona" :clickable="false">
                   <h1 class="title is-2">Selecciona tu vuelo</h1>
                   <!-- <p class="content"><b>Vuelo:</b> {{ selectedFlight }}</p> -->
-                  <div class="block">
+                  <div style="text-align: center">
                     <b-radio
                       class="radio-select"
                       v-for="item in flightList"
@@ -162,32 +160,49 @@
                   <h1 class="title is-2">Datos para la entrega</h1>
                   Necesitamos los datos para la entrega
                   <!-- <p class="content"><b>Datos:</b> {{ personalInfo }}</p>
-                  <p class="content"><b>Pago:</b> {{ paymentMethod }}</p> -->
+                    <p class="content"><b>Pago:</b> {{ paymentMethod }}</p> -->
                   <section>
                     <b-field label="Nombre">
-                      <b-input v-model="personalInfo.nombre"></b-input>
+                      <b-input
+                        v-model="personalInfo.nombre"
+                        @keyup.native="onStep3()"
+                      ></b-input>
                     </b-field>
                     <b-field label="Apellido">
-                      <b-input v-model="personalInfo.apellido"></b-input>
+                      <b-input
+                        v-model="personalInfo.apellido"
+                        @keyup.native="onStep3()"
+                      ></b-input>
                     </b-field>
                     <b-field label="Correo electrónico">
-                      <b-input v-model="personalInfo.email"></b-input>
+                      <b-input
+                        v-model="personalInfo.email"
+                        @keyup.native="onStep3()"
+                      ></b-input>
                     </b-field>
                   </section>
 
                   <h2 class="subtitle">Dirección de entrega</h2>
                   <section>
                     <b-field label="Dirección 1">
-                      <b-input v-model="personalInfo.address1"></b-input>
+                      <b-input
+                        v-model="personalInfo.address1"
+                        @keyup.native="onStep3()"
+                      ></b-input>
                     </b-field>
                     <b-field label="Dirección 2">
-                      <b-input v-model="personalInfo.address2"></b-input>
+                      <b-input
+                        v-model="personalInfo.address2"
+                        @keyup.native="onStep3()"
+                      ></b-input>
                     </b-field>
                   </section>
 
                   <h2 class="subtitle is-4">Método de pago</h2>
-                  <h3 class="subtitle">Total a pagar: {{ formatNumber(amount) }}</h3>
-                  <div class="block">
+                  <h3 class="subtitle">
+                    Total a pagar: {{ formatNumber(amount) }}
+                  </h3>
+                  <div style="text-align: center">
                     <b-radio
                       class="payment-select"
                       v-for="item in paymentOptions"
@@ -195,6 +210,7 @@
                       v-model="paymentMethod"
                       :native-value="item"
                       name="paymentSelect"
+                      @keyup.native="onStep3()"
                     >
                       <img :src="item.imagen" class="logo-pago" />
                     </b-radio>
@@ -203,16 +219,26 @@
 
                 <b-step-item step="5" label="Confirmación" :clickable="false">
                   <h1 class="title is-2">¡Reserva confirmada!</h1>
-                  <h2 class="title is-3">¡Gracias, {{personalInfo.nombre}}!</h2>
-                  <h2 class="subtitle is-3">Asegúrate de tener tu equipaje listo a la hora acordada.</h2>
-                  <br>
+                  <h2 class="title is-3">
+                    ¡Gracias, {{ personalInfo.nombre }}!
+                  </h2>
+                  <h2 class="subtitle is-3">
+                    Asegúrate de tener tu equipaje listo a la hora acordada.
+                  </h2>
+                  <br />
                   <h2 class="title is-4">Datos de la reserva</h2>
-                  <h3 class="subtitle">Aerolínea: LATAM <img :src="selectedFlight.imagen" class="airline" /></h3>
-                  <h3 class="subtitle">Piezas de equipaje: {{luggage}}</h3>
-                  <p class="subtitle">Origen: {{selectedFlight.origen}}</p>
-                  <p class="subtitle">Destino: {{selectedFlight.destino}}</p>
-                  <p class="subtitle">Fecha: {{selectedFlight.fecha.toLocaleDateString("en-US")}}</p>
-                  <p class="subtitle">Hora de entrega: {{time}}</p>
+                  <h3 class="subtitle">
+                    Aerolínea: LATAM
+                    <img :src="selectedFlight.imagen" class="airline" />
+                  </h3>
+                  <h3 class="subtitle">Piezas de equipaje: {{ luggage }}</h3>
+                  <p class="subtitle">Origen: {{ selectedFlight.origen }}</p>
+                  <p class="subtitle">Destino: {{ selectedFlight.destino }}</p>
+                  <p class="subtitle">
+                    Fecha:
+                    {{ selectedFlight.fecha.toLocaleDateString("en-US") }}
+                  </p>
+                  <p class="subtitle">Hora de entrega: {{ time }}</p>
                 </b-step-item>
 
                 <template
@@ -253,11 +279,17 @@
 
 <script>
 import debounce from "lodash/debounce";
-import latamLogo from "~/static/latam-logo.png";
-import payPalLogo from "~/static/paypal-logo.png";
-import webPayLogo from "~/static/webpay-logo.png";
+import latamLogo from "~/static/images/booking/latam-logo.png";
+import payPalLogo from "~/static/images/booking/paypal-logo.png";
+import webPayLogo from "~/static/images/booking/webpay-logo.png";
 
 export default {
+  transition: "transition",
+  head() {
+    return {
+      title: "Reserva | Hop",
+    };
+  },
   data() {
     return {
       activeStep: 0,
@@ -398,9 +430,9 @@ export default {
     },
     amount() {
       var total = 15000;
-      total += (this.luggage - 1)*5000;
+      total += (this.luggage - 1) * 5000;
       return total;
-    }
+    },
   },
   watch: {
     activeStep: function () {
@@ -448,12 +480,6 @@ export default {
     forbiddenObjects: function () {
       this.onStep2();
     },
-    personalInfo: function () {
-      this.onStep3();
-    },
-    paymentMethod: function () {
-      this.onStep3();
-    }
   },
   methods: {
     getAsyncData: debounce(function (name) {
@@ -462,11 +488,11 @@ export default {
       }
     }, 500),
     formatNumber(number) {
-      var formatter = new Intl.NumberFormat('es-ES', {
-  style: 'currency',
-  currency: 'CLP',
-});
-return formatter.format(number);
+      var formatter = new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: "CLP",
+      });
+      return formatter.format(number);
     },
     onStep0() {
       if (this.airportOrigin) {
@@ -493,7 +519,9 @@ return formatter.format(number);
           : true;
     },
     onStep3() {
-      if (this.paymentMethod) {
+      console.log("onstep3");
+      if (this.paymentMethod != {}) {
+        console.log("true");
         var info = this.personalInfo;
         this.nextDisabled =
           info.nombre &&
@@ -505,6 +533,7 @@ return formatter.format(number);
             ? false
             : true;
       } else {
+        console.log("false");
         this.nextDisabled = true;
       }
     },
@@ -523,18 +552,18 @@ return formatter.format(number);
   overflow: visible !important;
 }
 .radio-select {
-  margin-left: auto;
+  /* margin-left: auto;
   margin-right: auto;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem; */
   padding: 0.5rem;
   max-width: 16.75rem;
   background-color: rgba(118, 69, 154, 0.1);
   border-radius: 0.25rem;
 }
 .payment-select {
-  margin-left: auto;
+  /* margin-left: auto;
   margin-right: auto;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem; */
   width: fit-content !important;
   background-color: rgba(118, 69, 154, 0.1);
   border-radius: 0.25rem;
@@ -545,6 +574,8 @@ return formatter.format(number);
 }
 .b-radio {
   width: 100% !important;
+  margin: 0.25rem !important;
+  text-align: left !important;
 }
 .logo-imagen {
   width: 15rem;

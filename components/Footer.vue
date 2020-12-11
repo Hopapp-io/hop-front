@@ -1,19 +1,34 @@
 <template>
   <div style="overflow: hidden">
-    <div class="columns footer g" style="background-color: #ffffff; margin: 0; padding: 0; border-bottom: 1px solid transparent;
-  border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
-  border-image-slice: 1;">
+    <div
+      class="columns footer g"
+      style="
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid transparent;
+        border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
+        border-image-slice: 1;
+      "
+    >
       <div class="column is-one-quarter">
-        <img :src="require('~/static/Logo_Hop.png')" class="logo-footer" />
+        <img
+          :src="require('~/static/images/Logo_Hop.png')"
+          class="logo-footer"
+        />
       </div>
       <div class="column is-half">
         <div class="elemento-footer">
           <div class="columns" style="width: 100%">
             <div class="column" style="text-align: right">
-              <a class="link-footer">Política de privacidad</a>
+              <nuxt-link to="/privacidad" class="link-footer"
+                >Política de privacidad</nuxt-link
+              >
             </div>
             <div class="column" style="text-align: right">
-              <a class="link-footer">Contáctanos</a>
+              <nuxt-link to="/contacto" class="link-footer"
+                >Contáctanos</nuxt-link
+              >
             </div>
           </div>
         </div>
@@ -26,9 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="elemento-footer">
-        © 2020 Hop
-    </div>
+    <div class="elemento-footer">© 2020 Hop</div>
   </div>
 </template>
 

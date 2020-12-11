@@ -3,7 +3,7 @@
     <div class="timeline-item first">
       <div class="timeline-marker is-image is-96x96">
         <img
-          :src="require('~/static/Casa2.svg')"
+          :src="require('~/static/images/index/Casa2.svg')"
           width="50px"
           style="min-width: 50px"
         />
@@ -20,7 +20,7 @@
     <div class="timeline-item">
       <div class="timeline-marker is-image is-96x96">
         <img
-          :src="require('~/static/Documento.svg')"
+          :src="require('~/static/images/index/Documento.svg')"
           width="50px"
           style="min-width: 50px"
         />
@@ -37,7 +37,7 @@
     <div class="timeline-item">
       <div class="timeline-marker is-image is-96x96">
         <img
-          :src="require('~/static/Seguridad2.svg')"
+          :src="require('~/static/images/index/Seguridad2.svg')"
           width="40px"
           style="min-width: 40px"
         />
@@ -52,7 +52,7 @@
     <div class="timeline-item last">
       <div class="timeline-marker is-image is-96x96">
         <img
-          :src="require('~/static/Camara.svg')"
+          :src="require('~/static/images/index/Camara.svg')"
           width="50px"
           style="min-width: 50px"
         />
@@ -61,8 +61,7 @@
         <div>
           <p class="timeline-heading">Fin del servicio Hop</p>
           <p class="timeline-text">
-            Facturamos tu maleta y te enviamos una foto con las etiquetas de tu
-            equipaje.
+            Facturamos tu maleta y te enviamos una foto con las etiquetas de tu equipaje.
           </p>
         </div>
       </div>
@@ -78,7 +77,7 @@ export default {
 
 <style>
 .timeline {
-    display: inline-block;
+  display: inline-block;
 }
 
 .timeline .timeline-item::before {
