@@ -8,10 +8,6 @@
   </div>
 </template>
 
-<!-- Start of HubSpot Embed Code -->
-  <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/8965853.js"></script>
-<!-- End of HubSpot Embed Code -->
-
 <script>
 import Navbar from "~/components/Navbar";
 import Footer from "~/components/Footer";

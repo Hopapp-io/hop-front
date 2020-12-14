@@ -1,14 +1,14 @@
 <template>
   <div class="bg0">
-    <div class="contenedor">
-      <div class="inicio">
+    <div class="custom-container">
+      <div class="home">
         <div style="width: 100%;">
-          <h1 v-if="error.statusCode === 404" class="encabezado3">
+          <h1 v-if="error.statusCode === 404" class="headline3">
             Página no encontrada
           </h1>
-          <h1 v-else class="encabezado3">Ha ocurrido un error</h1>
+          <h1 v-else class="headline3">Ha ocurrido un error</h1>
 
-          <p class="texto2" style="text-align: center !important">
+          <p class="text2" style="text-align: center !important">
             <nuxt-link to="/"
               ><b-icon
                 class="icon-style link-footer"

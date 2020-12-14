@@ -1,9 +1,9 @@
 <template>
   <div class="bg1">
-    <div class="contenedor">
+    <div class="custom-container">
       <div class="columns">
         <div class="column">
-          <div class="inicio">
+          <div class="home">
             <div class="card" style="width: 100%; padding: 1%">
               <b-steps
                 v-model="activeStep"
@@ -16,14 +16,11 @@
                 <b-step-item step="1" label="Vuelo" :clickable="false">
                   <h1 class="title is-2">Llena los datos de tu vuelo</h1>
                   <section>
-                    <!-- <p class="content"><b>Origen:</b> {{ airportOrigin }}</p>
-                    <p class="content"><b>Destino:</b> {{ airportTarget }}</p>
-                    <p class="content"><b>Fecha:</b> {{ flightDate }}</p> -->
                     <b-field label="Origen">
                       <b-autocomplete
                         :data="getAirportList"
                         placeholder="SCL"
-                        field="nombre"
+                        field="name"
                         :loading="isFetching"
                         @typing="getAsyncData"
                         @select="(option) => (airportOrigin = option)"
@@ -33,11 +30,11 @@
                         <template slot-scope="props">
                           <div class="media">
                             <div class="media-content">
-                              {{ props.option.codigo }} -
-                              {{ props.option.ciudad }}
+                              {{ props.option.code }} -
+                              {{ props.option.location }}
                               <br />
                               <small>
-                                {{ props.option.nombre }}
+                                {{ props.option.name }}
                               </small>
                             </div>
                           </div>
@@ -48,7 +45,7 @@
                       <b-autocomplete
                         :data="getAirportList"
                         placeholder="MIA"
-                        field="nombre"
+                        field="name"
                         :loading="isFetching"
                         @typing="getAsyncData"
                         @select="(option) => (airportTarget = option)"
@@ -58,11 +55,11 @@
                         <template slot-scope="props">
                           <div class="media">
                             <div class="media-content">
-                              {{ props.option.codigo }} -
-                              {{ props.option.ciudad }}
+                              {{ props.option.code }} -
+                              {{ props.option.location }}
                               <br />
                               <small>
-                                {{ props.option.nombre }}
+                                {{ props.option.name }}
                               </small>
                             </div>
                           </div>
@@ -72,7 +69,7 @@
                     <b-field label="Fecha">
                       <b-datepicker
                         v-model="flightDate"
-                        placeholder="Seleccione una fecha"
+                        placeholder="Seleccione una date"
                         icon="calendar-today"
                         locale="ES-es"
                         editable
@@ -84,7 +81,6 @@
 
                 <b-step-item step="2" label="Selecciona" :clickable="false">
                   <h1 class="title is-2">Selecciona tu vuelo</h1>
-                  <!-- <p class="content"><b>Vuelo:</b> {{ selectedFlight }}</p> -->
                   <div style="text-align: center">
                     <b-radio
                       class="radio-select"
@@ -94,24 +90,24 @@
                       :native-value="item"
                       name="flightSelect"
                     >
-                      <img :src="item.imagen" class="logo-imagen" />
+                      <img :src="item.image" class="logo-image" alt="Logo"/>
                       <p>
                         <b-icon icon="airplane" size="is-small"> </b-icon>
-                        {{ item.origen }}
+                        {{ item.origin }}
                         <b-icon icon="arrow-right" size="is-small"> </b-icon>
-                        {{ item.destino }}
+                        {{ item.destination }}
                       </p>
                       <p>
                         <b-icon icon="calendar" size="is-small"> </b-icon>
-                        {{ item.fecha.toLocaleDateString("en-US") }}
+                        {{ item.date.toLocaleDateString("en-US") }}
                       </p>
                       <p>
                         <b-icon icon="clock" size="is-small"> </b-icon> Salida:
-                        {{ item.salida }}
+                        {{ item.departure }}
                       </p>
                       <p>
                         <b-icon icon="clock-outline" size="is-small"> </b-icon>
-                        Llegada {{ item.llegada }}
+                        Llegada {{ item.arrival }}
                       </p>
                     </b-radio>
                   </div>
@@ -121,8 +117,6 @@
                   <h1 class="title is-2">
                     ¿Cuántas piezas de equipaje nos entregas?
                   </h1>
-                  <!-- <p class="content"><b>N° equipaje:</b> {{ luggage }}</p>
-                  <p class="content"><b>Hora de entrega:</b> {{ time }}</p> -->
                   <section>
                     <b-field label="Piezas de equipaje">
                       <b-numberinput
@@ -150,7 +144,11 @@
                     </div>
                     <div class="field">
                       <b-checkbox v-model="terms">
-                        Acepto los términos y condiciones.
+                        Acepto los
+                        <a href="/terms.pdf" class="footer-link" target="_blank"
+                          >términos y condiciones</a
+                        >
+                        de Hop.
                       </b-checkbox>
                     </div>
                   </section>
@@ -159,18 +157,16 @@
                 <b-step-item step="4" label="Entrega" :clickable="false">
                   <h1 class="title is-2">Datos para la entrega</h1>
                   Necesitamos los datos para la entrega
-                  <!-- <p class="content"><b>Datos:</b> {{ personalInfo }}</p>
-                    <p class="content"><b>Pago:</b> {{ paymentMethod }}</p> -->
                   <section>
                     <b-field label="Nombre">
                       <b-input
-                        v-model="personalInfo.nombre"
+                        v-model="personalInfo.name"
                         @keyup.native="onStep3()"
                       ></b-input>
                     </b-field>
                     <b-field label="Apellido">
                       <b-input
-                        v-model="personalInfo.apellido"
+                        v-model="personalInfo.surname"
                         @keyup.native="onStep3()"
                       ></b-input>
                     </b-field>
@@ -210,18 +206,15 @@
                       v-model="paymentMethod"
                       :native-value="item"
                       name="paymentSelect"
-                      @keyup.native="onStep3()"
                     >
-                      <img :src="item.imagen" class="logo-pago" />
+                      <img :src="item.image" class="logo-pago" alt="Logo"/>
                     </b-radio>
                   </div>
                 </b-step-item>
 
                 <b-step-item step="5" label="Confirmación" :clickable="false">
                   <h1 class="title is-2">¡Reserva confirmada!</h1>
-                  <h2 class="title is-3">
-                    ¡Gracias, {{ personalInfo.nombre }}!
-                  </h2>
+                  <h2 class="title is-3">¡Gracias, {{ personalInfo.name }}!</h2>
                   <h2 class="subtitle is-3">
                     Asegúrate de tener tu equipaje listo a la hora acordada.
                   </h2>
@@ -229,14 +222,16 @@
                   <h2 class="title is-4">Datos de la reserva</h2>
                   <h3 class="subtitle">
                     Aerolínea: LATAM
-                    <img :src="selectedFlight.imagen" class="airline" />
+                    <img :src="selectedFlight.image" class="airline" alt="Logo"/>
                   </h3>
                   <h3 class="subtitle">Piezas de equipaje: {{ luggage }}</h3>
-                  <p class="subtitle">Origen: {{ selectedFlight.origen }}</p>
-                  <p class="subtitle">Destino: {{ selectedFlight.destino }}</p>
+                  <p class="subtitle">Origen: {{ selectedFlight.origin }}</p>
+                  <p class="subtitle">
+                    Destino: {{ selectedFlight.destination }}
+                  </p>
                   <p class="subtitle">
                     Fecha:
-                    {{ selectedFlight.fecha.toLocaleDateString("en-US") }}
+                    {{ selectedFlight.date.toLocaleDateString("en-US") }}
                   </p>
                   <p class="subtitle">Hora de entrega: {{ time }}</p>
                 </b-step-item>
@@ -279,9 +274,9 @@
 
 <script>
 import debounce from "lodash/debounce";
-import latamLogo from "~/static/images/booking/latam-logo.png";
-import payPalLogo from "~/static/images/booking/paypal-logo.png";
-import webPayLogo from "~/static/images/booking/webpay-logo.png";
+import latamLogo from "~/static/images/reservation/latam-logo.png";
+import payPalLogo from "~/static/images/reservation/paypal-logo.png";
+import webPayLogo from "~/static/images/reservation/webpay-logo.png";
 
 export default {
   transition: "transition",
@@ -306,77 +301,77 @@ export default {
       airportList: [
         {
           id: 1,
-          codigo: "SCL",
-          ciudad: "Santiago de Chile",
-          nombre: "Aeropuerto Internacional Arturo Merino Benítez",
+          code: "SCL",
+          location: "Santiago de Chile",
+          name: "Aeropuerto Internacional Arturo Merino Benítez",
         },
         {
           id: 2,
-          codigo: "DXB",
-          ciudad: "Dubái",
-          nombre: "Aeropuerto Internacional de Dubái",
+          code: "DXB",
+          location: "Dubái",
+          name: "Aeropuerto Internacional de Dubái",
         },
         {
           id: 3,
-          codigo: "PEK",
-          ciudad: "Pekín",
-          nombre: "Aeropuerto Internacional de Pekín",
+          code: "PEK",
+          location: "Pekín",
+          name: "Aeropuerto Internacional de Pekín",
         },
         {
           id: 4,
-          codigo: "MIA",
-          ciudad: "Miami",
-          nombre: "Aeropuerto Internacional de Miami",
+          code: "MIA",
+          location: "Miami",
+          name: "Aeropuerto Internacional de Miami",
         },
         {
           id: 5,
-          codigo: "MUC",
-          ciudad: "Múnich",
-          nombre: "Aeropuerto de Múnich",
+          code: "MUC",
+          location: "Múnich",
+          name: "Aeropuerto de Múnich",
         },
         {
           id: 6,
-          codigo: "LAX",
-          ciudad: "Los Ángeles",
-          nombre: "Aeropuerto Internacional de Los Ángeles",
+          code: "LAX",
+          location: "Los Ángeles",
+          name: "Aeropuerto Internacional de Los Ángeles",
         },
       ],
       flightList: [
         {
           id: 1,
-          origen: "SCL",
-          destino: "MIA",
-          fecha: new Date(),
-          salida: "03:30",
-          llegada: "05:45",
-          imagen: latamLogo,
+          origin: "SCL",
+          destination: "MIA",
+          date: new Date(),
+          departure: "03:30",
+          arrival: "05:45",
+          image: latamLogo,
         },
         {
           id: 2,
-          origen: "SCL",
-          destino: "MIA",
-          fecha: new Date(),
-          salida: "10:30",
-          llegada: "13:25",
-          imagen: latamLogo,
+          origin: "SCL",
+          destination: "MIA",
+          date: new Date(),
+          departure: "10:30",
+          arrival: "13:25",
+          image: latamLogo,
         },
         {
           id: 3,
-          origen: "SCL",
-          destino: "MIA",
-          fecha: new Date(),
-          salida: "15:40",
-          llegada: "17:25",
-          imagen: latamLogo,
+          origin: "SCL",
+          destination: "MIA",
+          date: new Date(),
+          departure: "15:40",
+          arrival: "17:25",
+          image: latamLogo,
         },
         {
           id: 4,
-          origen: "SCL",
-          destino: "MIA",
-          fecha: new Date(),
-          salida: "20:40",
-          llegada: "23:25",
-          imagen: latamLogo,
+          origin: "SCL",
+          destination: "MIA",
+          date: new Date(),
+          departure: "20:40",
+          arrival: "23:25",
+          image: latamLogo,
         },
       ],
       flightDate: new Date(),
@@ -384,7 +379,7 @@ export default {
       airportTarget: {},
       data: [],
       selectedFlight: {
-        fecha: new Date(),
+        date: new Date(),
       },
       isFetching: false,
       luggage: 1,
@@ -393,8 +388,8 @@ export default {
       terms: false,
       forbiddenObjects: false,
       personalInfo: {
-        nombre: null,
-        apellido: null,
+        name: null,
+        surname: null,
         email: null,
         address1: null,
         address2: null,
@@ -402,13 +397,13 @@ export default {
       paymentOptions: [
         {
           id: 1,
-          nombre: "PayPal",
-          imagen: payPalLogo,
+          name: "PayPal",
+          image: payPalLogo,
         },
         {
           id: 2,
-          nombre: "WebPay",
-          imagen: webPayLogo,
+          name: "WebPay",
+          image: webPayLogo,
         },
       ],
       paymentMethod: {},
@@ -418,7 +413,7 @@ export default {
     // filteredAirportList() {
     //   return (this.airportList || []).filter((option) => {
     //     return (
-    //       option.nombre
+    //       option.name
     //         .toString()
     //         .toLowerCase()
     //         .indexOf(this.airportOrigin.toLowerCase()) >= 0
@@ -480,6 +475,9 @@ export default {
     forbiddenObjects: function () {
       this.onStep2();
     },
+    paymentMethod: function () {
+      this.onStep3();
+    },
   },
   methods: {
     getAsyncData: debounce(function (name) {
@@ -520,12 +518,12 @@ export default {
     },
     onStep3() {
       console.log("onstep3");
-      if (this.paymentMethod != {}) {
-        console.log("true");
+      if (Object.keys(this.paymentMethod).length > 0) {
+        console.log("true", Object.keys(this.paymentMethod).length);
         var info = this.personalInfo;
         this.nextDisabled =
-          info.nombre &&
-          info.apellido &&
+          info.name &&
+          info.surname &&
           info.email &&
           info.address1 &&
           info.address2 &&
@@ -537,9 +535,6 @@ export default {
         this.nextDisabled = true;
       }
     },
-    // onStep4() {
-    //   this.nextDisabled = this.selectedFlight.id != null ? false : true;
-    // },
   },
 };
 </script>
@@ -577,7 +572,7 @@ export default {
   margin: 0.25rem !important;
   text-align: left !important;
 }
-.logo-imagen {
+.logo-image {
   width: 15rem;
 }
 .logo-pago {
@@ -596,6 +591,9 @@ export default {
 }
 .b-steps .steps .step-items .step-item .step-marker {
   border: 0.2em solid #b5b5b5;
+}
+.b-steps .steps .step-items .step-item .step-link:not(.is-clickable) {
+  cursor: unset;
 }
 @media only screen and (max-width: 1024px) {
   /* .radio-select {

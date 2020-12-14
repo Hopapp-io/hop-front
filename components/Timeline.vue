@@ -6,11 +6,12 @@
           :src="require('~/static/images/index/Casa2.svg')"
           width="50px"
           style="min-width: 50px"
+          alt="Casa"
         />
       </div>
       <div class="timeline-content">
         <div>
-          <p class="timeline-heading">Llegada</p>
+          <p class="timeline-headline">Llegada</p>
           <p class="timeline-text">
             Del agente <span class="bold">Hop</span> a la puerta de tu casa
           </p>
@@ -23,11 +24,12 @@
           :src="require('~/static/images/index/Documento.svg')"
           width="50px"
           style="min-width: 50px"
+          alt="Archivo"
         />
       </div>
       <div class="timeline-content">
         <div>
-          <p class="timeline-heading">Revisión de documentos</p>
+          <p class="timeline-headline">Revisión de documentos</p>
           <p class="timeline-text">
             Verificaremos la documentación pertinente a tu viaje.
           </p>
@@ -40,11 +42,12 @@
           :src="require('~/static/images/index/Seguridad2.svg')"
           width="40px"
           style="min-width: 40px"
+          alt="Seguridad"
         />
       </div>
       <div class="timeline-content">
         <div>
-          <p class="timeline-heading">Seguridad</p>
+          <p class="timeline-headline">Seguridad</p>
           <p class="timeline-text">Embalamos tu equipaje delante de ti.</p>
         </div>
       </div>
@@ -55,11 +58,12 @@
           :src="require('~/static/images/index/Camara.svg')"
           width="50px"
           style="min-width: 50px"
+          alt="Cámara"
         />
       </div>
       <div class="timeline-content">
         <div>
-          <p class="timeline-heading">Fin del servicio Hop</p>
+          <p class="timeline-headline">Fin del servicio Hop</p>
           <p class="timeline-text">
             Facturamos tu maleta y te enviamos una foto con las etiquetas de tu equipaje.
           </p>
@@ -92,7 +96,7 @@ export default {
   color: #ffffff;
 }
 
-.timeline-heading {
+.timeline-headline {
   font-family: "Work Sans", sans-serif;
   font-size: 2rem;
   font-weight: 700;

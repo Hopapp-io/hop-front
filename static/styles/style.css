@@ -9,7 +9,7 @@
     transform: translate3d(0, 15px, 0); 
 }
 
-.texto {
+.text {
     width: 80%;
     font-family: 'Work Sans', sans-serif;
     font-size: 1.5rem;
@@ -21,7 +21,7 @@
     color: #ffffff;
 }
 
-.texto2 {
+.text2 {
     /* width: 80%; */
     font-family: 'Work Sans', sans-serif;
     font-size: 1rem;
@@ -33,7 +33,18 @@
     color: #444444;
 }
 
-.encabezado {
+.text3 {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 1.2rem;
+    margin: 1rem 0 1rem 0;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align:justify;
+    padding: 0;
+    color: #444444;
+}
+
+.headline {
     font-family: 'Work Sans', sans-serif;
     font-size: 3.5rem;
     margin: 0 0 2.5rem 0;
@@ -43,7 +54,7 @@
     color: #ffffff;
 }
 
-.encabezado3 {
+.headline3 {
     font-family: 'Work Sans', sans-serif;
     font-size: 3.5rem;
     text-align: center;
@@ -54,7 +65,7 @@
     color: #444444;
 }
 
-.encabezado2 {
+.headline2 {
     font-family: 'Work Sans', sans-serif;
     font-size: 3.5rem;
     text-align: center;
@@ -65,7 +76,7 @@
     color: #444444;
 }
 
-.subtitulo {
+.subheading {
     font-family: 'Work Sans', sans-serif;
     font-size: 1.5rem;
     margin: 2.5rem 0 2.5rem 0;
@@ -76,11 +87,11 @@
     text-transform: uppercase;
 }
 
-.subtitulo2 {
+.subheading2 {
     font-family: 'Work Sans', sans-serif;
     font-size: 1.5rem;
     text-align: left;
-    margin: 1rem 0 1rem 0;
+    margin: 2rem 0 1rem 0;
     word-break: initial;
     line-height: 1;
     font-weight: 600;
@@ -105,12 +116,12 @@ a.navbar-item:hover{
     background-color: #76459a;
 }
 
-.contenedor {
+.custom-container {
     width: 100%;
     height: 100%;
 }
 
-.contenido {
+.custom-content {
     width: 75%;
     text-align: left;
 }
@@ -186,38 +197,38 @@ a.navbar-item:hover{
     justify-content: center;
 }
 
-.inicio {
+.home {
     align-items: center;
     display: flex;
     height: 100%;
 }
 
 @media only screen and (max-width : 1024px) {
-    .contenedor {
+    .custom-container {
         margin-right: 5%;
         margin-left: 5%;
     }
-    .imagen-principal {
+    .main-image {
         max-width: 100%;
         height: auto;
     }
     .bg1 {
         background-size: unset !important;
     }
-    .contenido {
+    .custom-content {
         width: 100%;
         text-align: left;
         padding: 1rem;
     }
-    .texto2 {
+    .text2 {
         text-align: center;
     }
 
-    .subtitulo2 {
+    .subheading2 {
         text-align: center;
     }
 
-    .inicio {
+    .home {
         display: flex;
         align-content: center;
         justify-content: center !important;
@@ -237,11 +248,11 @@ a.navbar-item:hover{
 }
 
 @media screen and (min-width: 1024px) {
-    .contenedor {
+    .custom-container {
         margin-right: 10%;
         margin-left: 10%;
     }
-    .imagen-principal {
+    .main-image {
         width: 32rem; 
         max-width: 32rem;
     }
