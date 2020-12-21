@@ -10,6 +10,15 @@ export default {
         ],
         link: [
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        ],
+        script: [
+            {
+                id: "hs-script-loader",
+                src: "//js.hs-scripts.com/8965853.js",
+                async: true, 
+                defer: true,
+                body: true,
+            },
         ]
     },
     modules: [
