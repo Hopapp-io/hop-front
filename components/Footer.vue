@@ -1,34 +1,48 @@
 <template>
   <div style="overflow: hidden">
-    <div class="columns footer g" style="background-color: #ffffff; margin: 0; padding: 0; border-bottom: 1px solid transparent;
-  border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
-  border-image-slice: 1;">
+    <div
+      class="columns footer g"
+      style="
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid transparent;
+        border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
+        border-image-slice: 1;
+      "
+    >
       <div class="column is-one-quarter">
-        <img :src="require('~/static/Logo_Hop.png')" class="logo-footer" />
+        <img
+          :src="require('~/static/images/Logo_Hop.png')"
+          class="footer-logo"
+          alt="Hop"
+        />
       </div>
       <div class="column is-half">
-        <div class="elemento-footer">
+        <div class="footer-element">
           <div class="columns" style="width: 100%">
             <div class="column" style="text-align: right">
-              <a class="link-footer">Política de privacidad</a>
+              <nuxt-link to="/privacy" class="footer-link"
+                >Política de privacidad</nuxt-link
+              >
             </div>
             <div class="column" style="text-align: right">
-              <a class="link-footer">Contáctanos</a>
+              <nuxt-link to="/contact" class="footer-link"
+                >Contáctanos</nuxt-link
+              >
             </div>
           </div>
         </div>
       </div>
       <div class="column">
-        <div class="elemento-footer">
-          <a class="link-footer"><b-icon icon="linkedin"> </b-icon></a>
-          <a class="link-footer"><b-icon icon="twitter"> </b-icon></a>
-          <a class="link-footer"><b-icon icon="rss"> </b-icon></a>
+        <div class="footer-element">
+          <a class="footer-link"><b-icon icon="linkedin"> </b-icon></a>
+          <a class="footer-link"><b-icon icon="twitter"> </b-icon></a>
+          <a class="footer-link"><b-icon icon="rss"> </b-icon></a>
         </div>
       </div>
     </div>
-    <div class="elemento-footer">
-        © 2020 Hop
-    </div>
+    <div class="footer-element">© 2020 Hop</div>
   </div>
 </template>
 
@@ -39,13 +53,13 @@ export default {
 </script>
 
 <style>
-.logo-footer {
+.footer-logo {
   width: auto;
   min-width: 100px;
   margin: 1rem 0 1rem 1rem;
 }
 
-.elemento-footer {
+.footer-element {
   justify-content: flex-end;
   align-items: center;
   display: flex;
@@ -53,7 +67,7 @@ export default {
   padding: 1rem;
 }
 
-.link-footer {
+.footer-link {
   transition-duration: 1s;
 }
 </style>
