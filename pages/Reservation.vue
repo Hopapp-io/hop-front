@@ -16,22 +16,25 @@
                 <b-step-item step="1" label="Vuelo" :clickable="false">
                   <h1 class="title is-2">Llena los datos de tu vuelo</h1>
                   <section>
+                    <!-- <p class="content"><b>Origen:</b> {{ airportOrigin }}</p>
+                    <p class="content"><b>Destino:</b> {{ airportTarget }}</p>
+                    <p class="content"><b>Fecha:</b> {{ flightDate }}</p> -->
                     <b-field label="Origen">
                       <b-autocomplete
-                        :data="getAirportList"
+                        v-model="selectedOrigin"
+                        :data="departureAirportList"
                         placeholder="SCL"
-                        field="name"
-                        :loading="isFetching"
-                        @typing="getAsyncData"
-                        @select="(option) => (airportOrigin = option)"
-                        open-on-focus
+                        field="fs"
+                        @select="(option) => selectOrigin(option)"
                         :clearable="true"
+                        :loading="loadingDeparture"
+                        :disabled="loadingDeparture"
                       >
                         <template slot-scope="props">
                           <div class="media">
                             <div class="media-content">
-                              {{ props.option.code }} -
-                              {{ props.option.location }}
+                              {{ props.option.fs }} - {{ props.option.city }},
+                              {{ props.option.countryName }}
                               <br />
                               <small>
                                 {{ props.option.name }}
@@ -43,20 +46,20 @@
                     </b-field>
                     <b-field label="Destino">
                       <b-autocomplete
-                        :data="getAirportList"
+                        v-model="selectedTarget"
+                        :data="arrivalAirportList"
                         placeholder="MIA"
-                        field="name"
-                        :loading="isFetching"
-                        @typing="getAsyncData"
-                        @select="(option) => (airportTarget = option)"
-                        open-on-focus
+                        field="fs"
+                        @select="(option) => selectTarget(option)"
                         :clearable="true"
+                        :loading="loadingArrival"
+                        :disabled="loadingArrival"
                       >
                         <template slot-scope="props">
                           <div class="media">
                             <div class="media-content">
-                              {{ props.option.code }} -
-                              {{ props.option.location }}
+                              {{ props.option.fs }} - {{ props.option.city }},
+                              {{ props.option.countryName }}
                               <br />
                               <small>
                                 {{ props.option.name }}
@@ -69,7 +72,7 @@
                     <b-field label="Fecha">
                       <b-datepicker
                         v-model="flightDate"
-                        placeholder="Seleccione una date"
+                        placeholder="Seleccione una fecha"
                         icon="calendar-today"
                         locale="ES-es"
                         editable
@@ -81,6 +84,14 @@
 
                 <b-step-item step="2" label="Selecciona" :clickable="false">
                   <h1 class="title is-2">Selecciona tu vuelo</h1>
+                  <div style="overflow: hidden">
+                    <div class="loading-icon" v-if="loadingFlights" />
+                    <!-- <b-loading
+                      :is-full-page="false"
+                      v-model="loadingFlights"
+                      :can-cancel="false"
+                    ></b-loading> -->
+                  </div>
                   <div style="text-align: center">
                     <b-radio
                       class="radio-select"
@@ -90,24 +101,35 @@
                       :native-value="item"
                       name="flightSelect"
                     >
-                      <img :src="item.image" class="logo-image" alt="Logo"/>
+                      <div style="width: 100%; text-align: center">
+                        <img
+                          :src="getLogo(item.carrierFsCode)"
+                          class="logo-image"
+                          alt="Logo"
+                        />
+                      </div>
                       <p>
                         <b-icon icon="airplane" size="is-small"> </b-icon>
-                        {{ item.origin }}
+                        {{ item.departureAirportFsCode }}
                         <b-icon icon="arrow-right" size="is-small"> </b-icon>
-                        {{ item.destination }}
+                        {{ item.arrivalAirportFsCode }}
                       </p>
                       <p>
                         <b-icon icon="calendar" size="is-small"> </b-icon>
-                        {{ item.date.toLocaleDateString("en-US") }}
+                        {{
+                          new Date(item.departureTime).toLocaleDateString(
+                            "en-US"
+                          )
+                        }}
                       </p>
                       <p>
                         <b-icon icon="clock" size="is-small"> </b-icon> Salida:
-                        {{ item.departure }}
+                        {{ new Date(item.departureTime).toLocaleTimeString() }}
                       </p>
                       <p>
                         <b-icon icon="clock-outline" size="is-small"> </b-icon>
-                        Llegada {{ item.arrival }}
+                        Llegada:
+                        {{ new Date(item.arrivalTime).toLocaleTimeString() }}
                       </p>
                     </b-radio>
                   </div>
@@ -207,7 +229,7 @@
                       :native-value="item"
                       name="paymentSelect"
                     >
-                      <img :src="item.image" class="logo-pago" alt="Logo"/>
+                      <img :src="item.image" class="logo-pago" alt="Logo" />
                     </b-radio>
                   </div>
                 </b-step-item>
@@ -221,17 +243,29 @@
                   <br />
                   <h2 class="title is-4">Datos de la reserva</h2>
                   <h3 class="subtitle">
-                    Aerolínea: LATAM
-                    <img :src="selectedFlight.image" class="airline" alt="Logo"/>
+                    Aerolínea: {{ getAirline(selectedFlight.carrierFsCode) }}
+                    <img
+                      :src="getLogo(selectedFlight.carrierFsCode)"
+                      class="airline"
+                      alt="Logo"
+                    />
                   </h3>
                   <h3 class="subtitle">Piezas de equipaje: {{ luggage }}</h3>
-                  <p class="subtitle">Origen: {{ selectedFlight.origin }}</p>
                   <p class="subtitle">
-                    Destino: {{ selectedFlight.destination }}
+                    Origen:
+                    {{ getAirport(selectedFlight.departureAirportFsCode) }}
+                  </p>
+                  <p class="subtitle">
+                    Destino:
+                    {{ getAirport(selectedFlight.arrivalAirportFsCode) }}
                   </p>
                   <p class="subtitle">
                     Fecha:
-                    {{ selectedFlight.date.toLocaleDateString("en-US") }}
+                    {{
+                      new Date(selectedFlight.departureTime).toLocaleDateString(
+                        "en-US"
+                      )
+                    }}
                   </p>
                   <p class="subtitle">Hora de entrega: {{ time }}</p>
                 </b-step-item>
@@ -273,10 +307,14 @@
 </template>
 
 <script>
-import debounce from "lodash/debounce";
-import latamLogo from "~/static/images/reservation/latam-logo.png";
+import logoLA from "~/static/images/reservation/latam-logo.png";
+import logoAA from "~/static/images/reservation/aa-logo.png";
+import logoIB from "~/static/images/reservation/iberia-logo.png";
+import logoH2 from "~/static/images/reservation/sky-logo.png";
+import logoJAT from "~/static/images/reservation/jetsmart-logo.png";
 import payPalLogo from "~/static/images/reservation/paypal-logo.png";
 import webPayLogo from "~/static/images/reservation/webpay-logo.png";
+import axios from "axios";
 
 export default {
   transition: "transition",
@@ -287,94 +325,28 @@ export default {
   },
   data() {
     return {
+      loadingFlights: true,
+      loadingArrival: true,
+      loadingDeparture: true,
       activeStep: 0,
-
       showSocial: true,
       isAnimated: true,
       isRounded: true,
       isStepsClickable: false,
-
       hasNavigation: true,
       customNavigation: true,
       nextDisabled: true,
       previousDisabled: true,
-      airportList: [
-        {
-          id: 1,
-          code: "SCL",
-          location: "Santiago de Chile",
-          name: "Aeropuerto Internacional Arturo Merino Benítez",
-        },
-        {
-          id: 2,
-          code: "DXB",
-          location: "Dubái",
-          name: "Aeropuerto Internacional de Dubái",
-        },
-        {
-          id: 3,
-          code: "PEK",
-          location: "Pekín",
-          name: "Aeropuerto Internacional de Pekín",
-        },
-        {
-          id: 4,
-          code: "MIA",
-          location: "Miami",
-          name: "Aeropuerto Internacional de Miami",
-        },
-        {
-          id: 5,
-          code: "MUC",
-          location: "Múnich",
-          name: "Aeropuerto de Múnich",
-        },
-        {
-          id: 6,
-          code: "LAX",
-          location: "Los Ángeles",
-          name: "Aeropuerto Internacional de Los Ángeles",
-        },
-      ],
-      flightList: [
-        {
-          id: 1,
-          origin: "SCL",
-          destination: "MIA",
-          date: new Date(),
-          departure: "03:30",
-          arrival: "05:45",
-          image: latamLogo,
-        },
-        {
-          id: 2,
-          origin: "SCL",
-          destination: "MIA",
-          date: new Date(),
-          departure: "10:30",
-          arrival: "13:25",
-          image: latamLogo,
-        },
-        {
-          id: 3,
-          origin: "SCL",
-          destination: "MIA",
-          date: new Date(),
-          departure: "15:40",
-          arrival: "17:25",
-          image: latamLogo,
-        },
-        {
-          id: 4,
-          origin: "SCL",
-          destination: "MIA",
-          date: new Date(),
-          departure: "20:40",
-          arrival: "23:25",
-          image: latamLogo,
-        },
-      ],
+      airlines: [],
+      airports: [],
+      departureAirports: [],
+      departureAirportsAux: [],
+      arrivalAirports: [],
+      arrivalAirportsAux: [],
+      flightList: [],
       flightDate: new Date(),
+      selectedOrigin: "",
+      selectedTarget: "",
       airportOrigin: {},
       airportTarget: {},
       data: [],
@@ -394,6 +366,13 @@ export default {
         address1: null,
         address2: null,
       },
+      airlinesLogo: [
+        { code: "AA", image: logoAA },
+        { code: "LA", image: logoLA },
+        { code: "IB", image: logoIB },
+        { code: "H2", image: logoH2 },
+        { code: "JAT", image: logoJAT },
+      ],
       paymentOptions: [
         {
           id: 1,
@@ -409,19 +388,44 @@ export default {
       paymentMethod: {},
     };
   },
+  mounted() {
+    this.getAirportList();
+    this.onStep0();
+  },
   computed: {
-    // filteredAirportList() {
-    //   return (this.airportList || []).filter((option) => {
-    //     return (
-    //       option.name
-    //         .toString()
-    //         .toLowerCase()
-    //         .indexOf(this.airportOrigin.toLowerCase()) >= 0
-    //     );
-    //   });
-    // },
-    getAirportList() {
-      return this.airportList;
+    departureAirportList() {
+      if (this.selectedOrigin.length >= 3) {
+        this.departureAirportsAux = (
+          (this.selectedOrigin.length == 3
+            ? this.departureAirports
+            : this.departureAirportsAux) || []
+        ).filter((option) => {
+          return (
+            `${option.fs} ${option.city} ${option.countryName} ${option.name}`
+              .toString()
+              .toLowerCase()
+              .indexOf(this.selectedOrigin.toLowerCase()) >= 0
+          );
+        });
+        return this.departureAirportsAux;
+      }
+    },
+    arrivalAirportList() {
+      if (this.selectedTarget.length >= 3) {
+        this.arrivalAirportsAux = (
+          (this.selectedTarget.length == 3
+            ? this.arrivalAirports
+            : this.arrivalAirportsAux) || []
+        ).filter((option) => {
+          return (
+            `${option.fs} ${option.city} ${option.name}`
+              .toString()
+              .toLowerCase()
+              .indexOf(this.selectedTarget.toLowerCase()) >= 0
+          );
+        });
+        return this.arrivalAirportsAux;
+      }
     },
     amount() {
       var total = 15000;
@@ -461,7 +465,8 @@ export default {
       this.onStep0();
     },
     selectedFlight: function () {
-      this.onStep1();
+      this.nextDisabled =
+        this.selectedFlight.flightNumber != null ? false : true;
     },
     luggage: function () {
       this.onStep2();
@@ -480,11 +485,66 @@ export default {
     },
   },
   methods: {
-    getAsyncData: debounce(function (name) {
-      if (!name.length) {
-        this.data = this.airportList;
+    getLogo(carrierFsCode) {
+      let carrier = this.airlinesLogo.find(
+        (airline) => airline.code === carrierFsCode
+      );
+      if (carrier != undefined) {
+        return carrier.image;
+      } else {
+        return null;
       }
-    }, 500),
+    },
+    getAirline(carrierFsCode) {
+      if (this.airlines.length > 0) {
+        let carrier = this.airlines.find(
+          (airline) => airline.fs === carrierFsCode
+        );
+        // if (carrier != undefined) {
+        return carrier != undefined ? carrier.name : null;
+        // }
+      }
+    },
+    getAirport(fsCode) {
+      if (this.airports.length > 0) {
+        let airport = this.airports.find((airport) => airport.fs === fsCode);
+        if (airport != undefined) {
+          return `${airport.city}, ${airport.countryName}, ${airport.fs}`;
+        }
+      }
+    },
+    getAirportList() {
+      if (this.departureAirports.length == 0) {
+        // this.loadingDeparture = true;
+        // this.getActiveAirports().then((res) => {
+        this.getAirportsCountry("CL")
+          .then((res) => {
+            console.log("A", res);
+            if (res) {
+              this.departureAirports = res.airports;
+              this.loadingDeparture = false;
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+      if (this.arrivalAirports.length == 0) {
+        // this.loadingArrival = true;
+        this.getActiveAirports()
+          .then((res) => {
+            // this.getAirportsCountry("CL").then((res) => {
+            console.log("B", res);
+            if (res) {
+              this.arrivalAirports = res.airports;
+              this.loadingArrival = false;
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    },
     formatNumber(number) {
       var formatter = new Intl.NumberFormat("es-ES", {
         style: "currency",
@@ -492,12 +552,62 @@ export default {
       });
       return formatter.format(number);
     },
+    async getFlights() {
+      try {
+        this.loadingFlights = true;
+        let res = await axios({
+          method: "get",
+          url: `${
+            this.$store.getters.getFsUrl
+          }/flex/schedules/rest/v1/json/from/${this.airportOrigin.fs}/to/${
+            this.airportTarget.fs
+          }/departing/${this.flightDate.getFullYear()}/${
+            this.flightDate.getMonth() + 1
+          }/${this.flightDate.getDate()}?appId=${
+            this.$store.state.appId
+          }&appKey=${this.$store.state.appKey}`,
+        });
+        this.loadingFlights = true;
+        return res.data;
+      } catch (err) {
+        this.loadingFlights = true;
+        console.error("error", err);
+      }
+    },
+    async getActiveAirports() {
+      try {
+        let res = await axios({
+          method: "get",
+          url: `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/json/active?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}`,
+        });
+        return res.data;
+      } catch (err) {
+        console.error("error", err);
+      }
+    },
+    async getAirportsCountry(countryCode) {
+      try {
+        let res = await axios({
+          method: "get",
+          url: `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/json/countryCode/${countryCode}?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}`,
+        });
+        return res.data;
+      } catch (err) {
+        console.error("error", err);
+      }
+    },
+    selectOrigin(option) {
+      this.airportOrigin = option;
+    },
+    selectTarget(option) {
+      this.airportTarget = option;
+    },
     onStep0() {
-      if (this.airportOrigin) {
+      if (this.airportOrigin && this.airportTarget) {
         this.nextDisabled =
-          this.airportOrigin.id != this.airportTarget.id &&
-          this.airportOrigin.id != null &&
-          this.airportTarget.id != null
+          this.airportOrigin != this.airportTarget &&
+          Object.keys(this.airportOrigin).length > 0 &&
+          Object.keys(this.airportTarget).length > 0
             ? false
             : true;
       } else {
@@ -505,7 +615,18 @@ export default {
       }
     },
     onStep1() {
-      this.nextDisabled = this.selectedFlight.id != null ? false : true;
+      this.getFlights()
+        .then((res) => {
+          // this.getAirportsCountry("CL").then((res) => {
+          this.airports = res.appendix.airports;
+          this.flightList = res.scheduledFlights;
+          this.airlines = res.appendix.airlines;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.nextDisabled =
+        this.selectedFlight.flightNumber != null ? false : true;
     },
     onStep2() {
       this.nextDisabled =
@@ -517,9 +638,7 @@ export default {
           : true;
     },
     onStep3() {
-      console.log("onstep3");
       if (Object.keys(this.paymentMethod).length > 0) {
-        console.log("true", Object.keys(this.paymentMethod).length);
         var info = this.personalInfo;
         this.nextDisabled =
           info.name &&
@@ -531,7 +650,6 @@ export default {
             ? false
             : true;
       } else {
-        console.log("false");
         this.nextDisabled = true;
       }
     },
@@ -573,7 +691,8 @@ export default {
   text-align: left !important;
 }
 .logo-image {
-  width: 15rem;
+  max-width: 15rem;
+  max-height: 3rem;
 }
 .logo-pago {
   max-width: 14rem;
@@ -585,6 +704,9 @@ export default {
 .control.is-clearfix {
   display: flex;
   align-items: center;
+}
+.b-radio.radio .control-label {
+    width: 100%;
 }
 .b-steps .steps .step-items .step-item.is-previous .step-marker {
   border: 0.2em solid #76459a;

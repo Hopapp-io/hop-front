@@ -1,16 +1,6 @@
 <template>
   <div style="overflow: hidden">
-    <div
-      class="columns footer g"
-      style="
-        background-color: #ffffff;
-        margin: 0;
-        padding: 0;
-        border-bottom: 1px solid transparent;
-        border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
-        border-image-slice: 1;
-      "
-    >
+    <div class="columns footer">
       <div class="column is-one-quarter">
         <img
           :src="require('~/static/images/Logo_Hop.png')"
@@ -53,6 +43,14 @@ export default {
 </script>
 
 <style>
+.footer {
+  background-color: #ffffff;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(to right, #ffffff, #909090, #ffffff);
+  border-image-slice: 1;
+}
 .footer-logo {
   width: auto;
   min-width: 100px;
@@ -60,6 +58,7 @@ export default {
 }
 
 .footer-element {
+  background-color: #ffffff;
   justify-content: flex-end;
   align-items: center;
   display: flex;

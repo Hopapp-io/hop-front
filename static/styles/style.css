@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Work+Sans:wght@400;500&display=swap');
 
+html {
+    background-color: #76459a;
+}
+
 .transition-enter-active, .transition-leave-active { 
     transition: opacity 0.25s ease-in-out, 
     transform 0.25s ease-in-out; 
 }
-  .transition-enter, .transition-leave-active { 
-      opacity: 0;
+.transition-enter, .transition-leave-active { 
+    opacity: 0;
     transform: translate3d(0, 15px, 0); 
 }
 

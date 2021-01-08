@@ -13,9 +13,10 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
+    "axios": "^0.21.1",
     "bulma-timeline": "^3.0.4",
-    "lodash.debounce": "^4.0.8",
-    "material-design-icons": "^3.0.1",
+    "jsonp": "^0.2.1",
     "nuxt": "^2.14.7",
     "nuxt-buefy": "^0.4.4",
     "sass": "^1.29.0",

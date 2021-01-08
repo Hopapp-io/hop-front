@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bg1">
+    <div class="bg1" id="hop">
       <div class="custom-container">
         <div class="columns">
           <div class="column is-three-fifths">
