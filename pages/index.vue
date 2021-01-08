@@ -28,7 +28,7 @@
           </div>
           <div class="column">
             <div class="home">
-              <div class="custom-content">
+              <div class="custom-content non-clickable">
                 <img
                   :src="require('~/static/images/index/Hop_Maleta.svg')"
                   class="main-image"
@@ -48,7 +48,7 @@
             <div class="card home">
               <div class="card-content" style="width: 100%">
                 <div class="columns" style="text-align: center; align-items: center">
-                  <div class="column is-one-third">
+                  <div class="column is-one-third non-clickable">
                     <img
                       :src="require('~/static/images/index/Seguridad.svg')"
                       width="115px"
@@ -71,7 +71,7 @@
             <div class="card home">
               <div class="card-content" style="width: 100%">
                 <div class="columns" style="text-align: center; align-items: center">
-                  <div class="column is-one-third">
+                  <div class="column is-one-third non-clickable">
                     <img
                       :src="require('~/static/images/index/Carro.svg')"
                       width="115px"
@@ -93,7 +93,7 @@
             <div class="card home">
               <div class="card-content" style="width: 100%">
                 <div class="columns" style="text-align: center; align-items: center">
-                  <div class="column is-one-third">
+                  <div class="column is-one-third non-clickable">
                     <img
                       :src="require('~/static/images/index/Casa.svg')"
                       width="115px"
@@ -116,7 +116,7 @@
             <div class="card home">
               <div class="card-content" style="width: 100%">
                 <div class="columns" style="text-align: center; align-items: center">
-                  <div class="column is-one-third">
+                  <div class="column is-one-third non-clickable">
                     <img
                       :src="require('~/static/images/index/Reloj.svg')"
                       width="115px"
@@ -140,7 +140,7 @@
             <div class="card home">
               <div class="card-content" style="width: 100%">
                 <div class="columns" style="text-align: center; align-items: center">
-                  <div class="column is-one-third">
+                  <div class="column is-one-third non-clickable">
                     <img
                       :src="require('~/static/images/index/Cuenta.svg')"
                       width="115px"
@@ -173,7 +173,7 @@
               <div class="card" style="width: 100%">
                 <div class="card-content" style="width: 100%; background-color: #ffffff">
                   <div class="columns" style="text-align: center; align-items: center">
-                    <div class="column is-one-third">
+                    <div class="column is-one-third non-clickable">
                       <img
                         :src="require('~/static/images/index/Persona1.png')"
                         width="auto"
