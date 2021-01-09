@@ -273,6 +273,7 @@
 </template>
 
 <script>
+import { getAPI } from '../axios-api'
 import debounce from "lodash/debounce";
 import latamLogo from "~/static/images/reservation/latam-logo.png";
 import payPalLogo from "~/static/images/reservation/paypal-logo.png";
@@ -287,6 +288,7 @@ export default {
   },
   data() {
     return {
+      APIData: [],
       activeStep: 0,
 
       showSocial: true,
@@ -534,6 +536,16 @@ export default {
         console.log("false");
         this.nextDisabled = true;
       }
+    },
+    postReservation () {
+      getAPI.get('/flights')
+        .then(response => {
+          console.log('API recieved data')
+          this.APIData = response.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
   },
 };

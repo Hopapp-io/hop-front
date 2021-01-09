@@ -13,6 +13,7 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "bulma-timeline": "^3.0.4",
     "lodash.debounce": "^4.0.8",
     "material-design-icons": "^3.0.1",
