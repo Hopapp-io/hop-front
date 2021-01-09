@@ -1,7 +1,7 @@
 <template>
   <div style="overflow: hidden">
     <div
-      class="columns footer g"
+      class="columns footer"
       style="
         background-color: #ffffff;
         margin: 0;
@@ -11,7 +11,7 @@
         border-image-slice: 1;
       "
     >
-      <div class="column is-one-quarter">
+      <div class="column is-one-quarter non-clickable">
         <img
           :src="require('~/static/images/Logo_Hop.png')"
           class="footer-logo"
@@ -23,7 +23,12 @@
           <div class="columns" style="width: 100%">
             <div class="column" style="text-align: right">
               <nuxt-link to="/privacy" class="footer-link"
-                >Política de privacidad</nuxt-link
+                >Privacidad</nuxt-link
+              >
+            </div>
+            <div class="column" style="text-align: right">
+              <nuxt-link to="/about" class="footer-link"
+                >Conócenos</nuxt-link
               >
             </div>
             <div class="column" style="text-align: right">

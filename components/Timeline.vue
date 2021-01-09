@@ -1,7 +1,7 @@
 <template>
   <div class="timeline">
     <div class="timeline-item first">
-      <div class="timeline-marker is-image is-96x96">
+      <div class="timeline-marker is-image is-96x96 non-clickable">
         <img
           :src="require('~/static/images/index/Casa2.svg')"
           width="50px"
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="timeline-item">
-      <div class="timeline-marker is-image is-96x96">
+      <div class="timeline-marker is-image is-96x96 non-clickable">
         <img
           :src="require('~/static/images/index/Documento.svg')"
           width="50px"
@@ -37,7 +37,7 @@
       </div>
     </div>
     <div class="timeline-item">
-      <div class="timeline-marker is-image is-96x96">
+      <div class="timeline-marker is-image is-96x96 non-clickable">
         <img
           :src="require('~/static/images/index/Seguridad2.svg')"
           width="40px"
@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="timeline-item last">
-      <div class="timeline-marker is-image is-96x96">
+      <div class="timeline-marker is-image is-96x96 non-clickable">
         <img
           :src="require('~/static/images/index/Camara.svg')"
           width="50px"
