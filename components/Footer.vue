@@ -26,7 +26,7 @@
       </div>
       <div class="column">
         <div class="footer-element">
-          <a class="footer-link"><b-icon icon="linkedin"> </b-icon></a>
+          <a class="footer-link" href="https://www.linkedin.com/company/hop-io/" target="_blank"><b-icon icon="linkedin"> </b-icon></a>
           <a class="footer-link"><b-icon icon="twitter"> </b-icon></a>
           <a class="footer-link"><b-icon icon="rss"> </b-icon></a>
         </div>

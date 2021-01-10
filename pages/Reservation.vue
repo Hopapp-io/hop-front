@@ -7,7 +7,7 @@
             <div class="card" style="width: 100%; padding: 1%">
               <b-steps
                 v-model="activeStep"
-                :animated="isAnimated"
+                :animated="true"
                 :rounded="true"
                 :has-navigation="true"
                 label-position="bottom"
@@ -16,9 +16,6 @@
                 <b-step-item step="1" label="Vuelo" :clickable="false">
                   <h1 class="title is-2">Llena los datos de tu vuelo</h1>
                   <section>
-                    <!-- <p class="content"><b>Origen:</b> {{ airportOrigin }}</p>
-                    <p class="content"><b>Destino:</b> {{ airportTarget }}</p>
-                    <p class="content"><b>Fecha:</b> {{ flightDate }}</p> -->
                     <b-field label="Origen">
                       <b-autocomplete
                         v-model="selectedOrigin"
@@ -84,15 +81,22 @@
 
                 <b-step-item step="2" label="Selecciona" :clickable="false">
                   <h1 class="title is-2">Selecciona tu vuelo</h1>
-                  <div style="overflow: hidden">
-                    <div class="loading-icon" v-if="loadingFlights" />
-                    <!-- <b-loading
-                      :is-full-page="false"
-                      v-model="loadingFlights"
-                      :can-cancel="false"
-                    ></b-loading> -->
+                  <Loading v-if="loadingFlights" />
+                  <!-- <div v-if="loadingFlights" style="display: inline-block">
+                    <div class="loading-icon"> </div>
+                  </div> -->
+                  <div
+                    class="alert"
+                    v-if="!loadingFlights && flightList.length == 0"
+                  >
+                    ¡Vaya! Parece que ningún vuelo concide con tu búsqueda.
+                    <br />
+                    <nuxt-link to="/reservation" @click.native="reloadPage"
+                      >Nueva búsqueda</nuxt-link
+                    ><br />
+                    <nuxt-link to="/">Volver al inicio</nuxt-link>
                   </div>
-                  <div style="text-align: center">
+                  <div v-else-if="!loadingFlights" style="text-align: center">
                     <b-radio
                       class="radio-select"
                       v-for="item in flightList"
@@ -118,7 +122,7 @@
                         <b-icon icon="calendar" size="is-small"> </b-icon>
                         {{
                           new Date(item.departureTime).toLocaleDateString(
-                            "en-US"
+                            "es-ES"
                           )
                         }}
                       </p>
@@ -133,6 +137,11 @@
                       </p>
                     </b-radio>
                   </div>
+                  <!-- <b-loading
+                    :is-full-page="true"
+                    v-model="loadingFlights"
+                    :can-cancel="false"
+                  ></b-loading> -->
                 </b-step-item>
 
                 <b-step-item step="3" label="Equipaje" :clickable="false">
@@ -270,12 +279,10 @@
                   <p class="subtitle">Hora de entrega: {{ time }}</p>
                 </b-step-item>
 
-                <template
-                  v-if="customNavigation"
-                  slot="navigation"
-                  slot-scope="{ previous, next }"
+                <template slot="navigation" slot-scope="{ previous, next }"
                   ><div style="display: flex; justify-content: center">
                     <b-button
+                    class="margin"
                       outlined
                       type="is-primary"
                       icon-pack="mdi"
@@ -286,6 +293,7 @@
                       Anterior
                     </b-button>
                     <b-button
+                    class="margin"
                       outlined
                       type="is-primary"
                       icon-pack="mdi"
@@ -307,6 +315,7 @@
 </template>
 
 <script>
+import Loading from "~/components/Loading";
 import logoLA from "~/static/images/reservation/latam-logo.png";
 import logoAA from "~/static/images/reservation/aa-logo.png";
 import logoIB from "~/static/images/reservation/iberia-logo.png";
@@ -314,10 +323,13 @@ import logoH2 from "~/static/images/reservation/sky-logo.png";
 import logoJAT from "~/static/images/reservation/jetsmart-logo.png";
 import payPalLogo from "~/static/images/reservation/paypal-logo.png";
 import webPayLogo from "~/static/images/reservation/webpay-logo.png";
-import axios from "axios";
+import fetchJsonp from "fetch-jsonp";
 
 export default {
   transition: "transition",
+  components: {
+    Loading,
+  },
   head() {
     return {
       title: "Reserva | Hop",
@@ -329,12 +341,6 @@ export default {
       loadingArrival: true,
       loadingDeparture: true,
       activeStep: 0,
-      showSocial: true,
-      isAnimated: true,
-      isRounded: true,
-      isStepsClickable: false,
-      hasNavigation: true,
-      customNavigation: true,
       nextDisabled: true,
       previousDisabled: true,
       airlines: [],
@@ -345,14 +351,14 @@ export default {
       arrivalAirportsAux: [],
       flightList: [],
       flightDate: new Date(),
+      originCounter: 3,
+      targetCounter: 3,
       selectedOrigin: "",
       selectedTarget: "",
       airportOrigin: {},
       airportTarget: {},
       data: [],
-      selectedFlight: {
-        date: new Date(),
-      },
+      selectedFlight: {},
       isFetching: false,
       luggage: 1,
       timeList: ["07:55 - 10:55", "08:05 - 11:10"],
@@ -395,11 +401,12 @@ export default {
   computed: {
     departureAirportList() {
       if (this.selectedOrigin.length >= 3) {
-        this.departureAirportsAux = (
-          (this.selectedOrigin.length == 3
+        var list =
+          this.selectedOrigin.length == 3 ||
+          this.selectOrigin.length < this.originCounter
             ? this.departureAirports
-            : this.departureAirportsAux) || []
-        ).filter((option) => {
+            : this.departureAirportsAux;
+        this.departureAirportsAux = (list || []).filter((option) => {
           return (
             `${option.fs} ${option.city} ${option.countryName} ${option.name}`
               .toString()
@@ -407,16 +414,18 @@ export default {
               .indexOf(this.selectedOrigin.toLowerCase()) >= 0
           );
         });
+        this.originCounter = this.selectedOrigin.length;
         return this.departureAirportsAux;
       }
     },
     arrivalAirportList() {
       if (this.selectedTarget.length >= 3) {
-        this.arrivalAirportsAux = (
-          (this.selectedTarget.length == 3
+        var list =
+          this.selectedTarget.length == 3 ||
+          this.selectTarget.length < this.targetCounter
             ? this.arrivalAirports
-            : this.arrivalAirportsAux) || []
-        ).filter((option) => {
+            : this.arrivalAirportsAux;
+        this.arrivalAirportsAux = (list || []).filter((option) => {
           return (
             `${option.fs} ${option.city} ${option.name}`
               .toString()
@@ -424,6 +433,7 @@ export default {
               .indexOf(this.selectedTarget.toLowerCase()) >= 0
           );
         });
+        this.targetCounter = this.selectedTarget.length;
         return this.arrivalAirportsAux;
       }
     },
@@ -500,9 +510,7 @@ export default {
         let carrier = this.airlines.find(
           (airline) => airline.fs === carrierFsCode
         );
-        // if (carrier != undefined) {
         return carrier != undefined ? carrier.name : null;
-        // }
       }
     },
     getAirport(fsCode) {
@@ -515,13 +523,10 @@ export default {
     },
     getAirportList() {
       if (this.departureAirports.length == 0) {
-        // this.loadingDeparture = true;
-        // this.getActiveAirports().then((res) => {
         this.getAirportsCountry("CL")
           .then((res) => {
-            console.log("A", res);
             if (res) {
-              this.departureAirports = res.airports;
+              this.departureAirports = res;
               this.loadingDeparture = false;
             }
           })
@@ -530,13 +535,10 @@ export default {
           });
       }
       if (this.arrivalAirports.length == 0) {
-        // this.loadingArrival = true;
         this.getActiveAirports()
           .then((res) => {
-            // this.getAirportsCountry("CL").then((res) => {
-            console.log("B", res);
             if (res) {
-              this.arrivalAirports = res.airports;
+              this.arrivalAirports = res;
               this.loadingArrival = false;
             }
           })
@@ -555,43 +557,67 @@ export default {
     async getFlights() {
       try {
         this.loadingFlights = true;
-        let res = await axios({
-          method: "get",
-          url: `${
-            this.$store.getters.getFsUrl
-          }/flex/schedules/rest/v1/json/from/${this.airportOrigin.fs}/to/${
+        let res = await fetchJsonp(
+          `${this.$store.getters.getFsUrl}/flex/schedules/rest/v1/jsonp/from/${
+            this.airportOrigin.fs
+          }/to/${
             this.airportTarget.fs
           }/departing/${this.flightDate.getFullYear()}/${
             this.flightDate.getMonth() + 1
           }/${this.flightDate.getDate()}?appId=${
             this.$store.state.appId
-          }&appKey=${this.$store.state.appKey}`,
-        });
-        this.loadingFlights = true;
-        return res.data;
+          }&appKey=${this.$store.state.appKey}&extendedOptions=languageCode:es`
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (json) {
+            return json;
+          })
+          .catch(function (ex) {
+            return ex;
+          });
+        this.loadingFlights = false;
+        return res;
       } catch (err) {
-        this.loadingFlights = true;
+        this.loadingFlights = false;
         console.error("error", err);
       }
     },
     async getActiveAirports() {
       try {
-        let res = await axios({
-          method: "get",
-          url: `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/json/active?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}`,
-        });
-        return res.data;
+        let res = await fetchJsonp(
+          `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/jsonp/active?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}&extendedOptions=languageCode:es`
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (json) {
+            return json;
+          })
+          .catch(function (ex) {
+            return ex;
+          });
+        return res;
       } catch (err) {
         console.error("error", err);
       }
     },
     async getAirportsCountry(countryCode) {
       try {
-        let res = await axios({
-          method: "get",
-          url: `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/json/countryCode/${countryCode}?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}`,
-        });
-        return res.data;
+        let res = await fetchJsonp(
+          `${this.$store.getters.getFsUrl}/flex/airports/rest/v1/jsonp/countryCode/${countryCode}?appId=${this.$store.state.appId}&appKey=${this.$store.state.appKey}&extendedOptions=languageCode:es`
+        )
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (json) {
+            return json;
+          })
+          .catch(function (ex) {
+            return ex;
+          });
+        return res;
       } catch (err) {
         console.error("error", err);
       }
@@ -617,16 +643,18 @@ export default {
     onStep1() {
       this.getFlights()
         .then((res) => {
-          // this.getAirportsCountry("CL").then((res) => {
-          this.airports = res.appendix.airports;
-          this.flightList = res.scheduledFlights;
-          this.airlines = res.appendix.airlines;
+          if (res.appendix) {
+            this.airports = res.appendix.airports;
+            this.flightList = res.scheduledFlights;
+            this.airlines = res.appendix.airlines;
+          } else {
+            this.flightList = [];
+          }
         })
         .catch((e) => {
           console.log(e);
         });
-      this.nextDisabled =
-        this.selectedFlight.flightNumber != null ? false : true;
+      this.selectedFlight = {};
     },
     onStep2() {
       this.nextDisabled =
@@ -653,12 +681,21 @@ export default {
         this.nextDisabled = true;
       }
     },
+    reloadPage() {
+      this.originCounter = 3;
+      this.airportOrigin = {};
+      this.selectedOrigin = "";
+      this.targetCounter = 3;
+      this.airportTarget = {};
+      this.selectedTarget = "";
+      this.activeStep = 0;
+    },
   },
 };
 </script>
 
 <style>
-.button {
+.button.margin {
   margin: 0.3rem;
 }
 .card {
@@ -706,7 +743,7 @@ export default {
   align-items: center;
 }
 .b-radio.radio .control-label {
-    width: 100%;
+  width: 100%;
 }
 .b-steps .steps .step-items .step-item.is-previous .step-marker {
   border: 0.2em solid #76459a;
@@ -716,6 +753,41 @@ export default {
 }
 .b-steps .steps .step-items .step-item .step-link:not(.is-clickable) {
   cursor: unset;
+}
+.is-loading .input {
+  border: solid 1px #d5d5d5;
+}
+.control.is-loading::after {
+  -webkit-animation: spinAround 500ms infinite linear;
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid #76459a;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  height: 1em;
+  position: relative;
+  width: 1em;
+}
+.alert {
+  background-color: #fdcd7e;
+  background-color: rgba(253, 205, 126, 0.5);
+  padding: 1%;
+  border-radius: 0.25rem;
+  text-align: center;
+  font-family: "Work Sans", sans-serif;
+  font-size: 1.25rem;
+}
+.alert a {
+  color: black;
+  text-decoration: underline;
+  font-size: 1rem;
+}
+.b-steps .steps .step-items .step-item::before, .b-steps .steps .step-items .step-item::after {
+    background: linear-gradient(to left, #b5b5b5 50%, #76459a 50%);
+    background-size: 200% 100%;
+    background-position: right bottom;
 }
 @media only screen and (max-width: 1024px) {
   /* .radio-select {

@@ -151,11 +151,11 @@
                   <div class="column">
                     <p class="subheading2" style="font-weight: 300">¿Y cuánto cuesta?</p>
                     <p class="subheading2">Depende de la cantidad de maletas</p>
-                    <p class="text2">
+                    x<p class="text2">
                       - Si llevas sólo una maleta el precio será de $15.000
                     </p>
                     <p class="text2">
-                      - Por cada maleta adicional, te cobraremos $5.000
+                      - Por cada maleta adicional, te cobraremos $5.000 
                     </p>
                   </div>
                 </div>
