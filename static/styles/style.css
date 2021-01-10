@@ -192,7 +192,7 @@ a.navbar-item:hover{
 .bg5 {
     padding: 3rem 0 3rem 0;
     background-image: url('~@/static/images/Fondo_Contacto.jpg');
-    background-attachment: fixed;
+    /* background-attachment: fixed; */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -205,6 +205,20 @@ a.navbar-item:hover{
     align-items: center;
     display: flex;
     height: 100%;
+}
+
+.non-clickable {
+    position: relative;
+}
+  
+.non-clickable:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
 }
 
 @media only screen and (max-width : 1024px) {
@@ -248,6 +262,9 @@ a.navbar-item:hover{
         color: #ffffff !important;
         text-align: right;
         padding-right: 2rem !important;
+    }
+    .bg5 {
+        min-height: 300px;
     }
 }
 

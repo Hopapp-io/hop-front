@@ -2,11 +2,13 @@
   <b-navbar fixed-top close-on-click class="is-primary">
     <template slot="brand">
       <nuxt-link to="/">
-        <img
-          :src="require('~/static/images/Logo_Hop_blanco 1.svg')"
-          alt="Hop"
-          class="logo"
-      /></nuxt-link>
+        <div class="non-clickable">
+          <img
+            :src="require('~/static/images/Logo_Hop_blanco 1.svg')"
+            alt="Hop"
+            class="logo"
+          /></div
+      ></nuxt-link>
     </template>
     <template slot="end">
       <b-navbar-item tag="nuxt-link" to="/#hop"> Sobre nosotros </b-navbar-item>
