@@ -3,7 +3,9 @@
 html {
     background-color: #76459a;
 }
-
+html, body {
+    font-family: 'Work Sans', sans-serif !important;
+}
 .transition-enter-active, .transition-leave-active { 
     transition: opacity 0.25s ease-in-out, 
     transform 0.25s ease-in-out; 

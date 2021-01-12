@@ -82,9 +82,6 @@
                 <b-step-item step="2" label="Selecciona" :clickable="false">
                   <h1 class="title is-2">Selecciona tu vuelo</h1>
                   <Loading v-if="loadingFlights" />
-                  <!-- <div v-if="loadingFlights" style="display: inline-block">
-                    <div class="loading-icon"> </div>
-                  </div> -->
                   <div
                     class="alert"
                     v-if="!loadingFlights && flightList.length == 0"
@@ -137,11 +134,6 @@
                       </p>
                     </b-radio>
                   </div>
-                  <!-- <b-loading
-                    :is-full-page="true"
-                    v-model="loadingFlights"
-                    :can-cancel="false"
-                  ></b-loading> -->
                 </b-step-item>
 
                 <b-step-item step="3" label="Equipaje" :clickable="false">
@@ -272,7 +264,7 @@
                     Fecha:
                     {{
                       new Date(selectedFlight.departureTime).toLocaleDateString(
-                        "en-US"
+                        "es-ES"
                       )
                     }}
                   </p>
